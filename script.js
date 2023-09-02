@@ -1,41 +1,126 @@
-const computerChoiceDisplay = document.getElementById('computer-choice');
-const userChoiceDisplay = document.getElementById('user-choice');
-const resultDsisplay = document.getElementById('result');
-const possibleChoices = document.querySelectorAll('button');
+const computerScore = document.getElementById('computer-score');
+const userScore = document.getElementById('user-score');
+const result = document.getElementById('result');
+const tiedMatches = document.getElementById('tied-score');
+var generate = document.getElementById('generate');
+
+
+alert("Let's play a game.");
+alert("R = Rock, P = Paper, S = Scissors");
+
 let userChoice;
+let computerChoice = "";
 
-alert("I want to play a game.");
+var wins = 0;
+var losses = 0;
+var ties = 0;
+var winner = '';
 
-possibleChoices.forEach(possibleChoice => possibleChoice.addEventListener('click', (e) => {
-    var playTheGame = confirm("Do you want to play a game?");
-
-    if (playTheGame) {
-        userChoice = e.target.id;
-        userChoiceDisplay.innerHTML = userChoice;
-        generateComputerChoice();
+function generateResult() {
+    console.log("function generateResult");
+    if (computerChoice === userChoice) {
+        ties++;
+        alert("Computer chose " + computerChoice + ", You chose " + userChoice + ". It's a tie.")
     }
-}))
-
-function generateComputerChoice() {
-    var randomNumber = Math.random() * possibleChoices.length; // or you can use possibleChoices.length
-    randomNumber = Math.ceil(randomNumber);
-    let computerChoice = "";
-
-    
-    if (randomNumber === 1) {
-        computerChoice = 'rock';
-        console.log("rock ran");
+    else if(computerChoice === 'R' && userChoice === 'S') {
+        losses++;
+        winner = "Computer";
+        alert("Computer chose " + computerChoice + ", You chose " + userChoice + ". " + winner + " wins.")
     }
-    if (randomNumber === 2) {
-        computerChoice = 'scissors';
-        console.log("scissors ran");
+    else if(computerChoice === 'S' && userChoice === 'P') {
+        losses++;
+        winner = "Computer";
+        alert("Computer chose " + computerChoice + ", You chose " + userChoice + ". " + winner + " wins.")
     }
-    if (randomNumber === 3) {
-        computerChoice = 'paper';
-        console.log("paper ran");
+    else if(computerChoice === 'P' && userChoice === 'R') {
+        losses++;
+        winner = "Computer";
+        alert("Computer chose " + computerChoice + ", You chose " + userChoice + ". " + winner + " wins.")
     }
+    else if(userChoice === 'R' && computerChoice === 'S') {
+        wins++;
+        winner = "User";
+        alert("Computer chose " + computerChoice + ", You chose " + userChoice + ". " + winner + " wins.")
+    }
+    else if(userChoice === 'S' && computerChoice === 'P') {
+        wins++;
+        winner = "User";
+        alert("Computer chose " + computerChoice + ", You chose " + userChoice + ". " + winner + " wins.")
+    }
+    else if(userChoice === 'P' && computerChoice === 'R') {
+        wins++;
+        winner = "User";
+        alert("Computer chose " + computerChoice + ", You chose " + userChoice + ". " + winner + " wins.")
+    }
+    else {
+        alert("bye");
+        return;
+    }
+   
+    var playAgain = confirm("Play again?")
 
-    computerChoiceDisplay.innerHTML = computerChoice;
+    if(playAgain) {
+        playAGame();
+    }
+    else {
+    var realWinner
+    if(wins > losses) {
+        realWinner = "User";
+    }
+    else if (wins < losses) {
+        realWinner = "Computer";
+    }
+    else if (wins === losses) {
+        realWinner = "Tied";
+    }
+    console.log(losses, wins, ties, realWinner);
+    computerScore.innerHTML = losses;
+    userScore.innerHTML = wins;
+    result.innerHTML = realWinner;
+    tiedMatches.innerHTML = ties;
+    }
+    return;
 }
 
+function generateComputerChoice() {
+    let randomNumber = Math.random() * 3; 
+    randomNumber = Math.ceil(randomNumber);
+    
+    
+    if (userChoice === "R" || userChoice === "P" || userChoice === "S") {
+        if (randomNumber === 1) {
+            computerChoice = 'R';
+            console.log("rock ran");
+        }
+        else if (randomNumber === 2) {
+            computerChoice = 'S';
+            console.log("scissors ran");
+        }
+        else if (randomNumber === 3) {
+            computerChoice = 'P';
+            console.log("paper ran");
+        }
+        else {
+            alert("bye");
+            return;
+        }
+       
+        generateResult();
+    }
+    
+    
+}
+    
+function playAGame() {
+    userChoice = prompt("Rock, Paper, or Scissors?");
+    userChoice = userChoice.toUpperCase();
+
+    console.log(userChoice);
+
+
+    generateComputerChoice();
+}
+
+playAGame();
+// generate.addEventListener("click", playAGame);
 
